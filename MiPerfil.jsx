@@ -25,12 +25,13 @@ export const MiPerfil = () => {
   });
   return (
     <Container>
+       <Toaster position="top-right" />
       {isPending ? (
         <span>guardando...🐖</span>
       ) : (
         <>
           <Title>Mi Perfil</Title>
-          <Toaster position="top-right" />
+         
           <Avatar>
             <ContentRol>
               <span>{datausuarios?.roles?.nombre} </span>
