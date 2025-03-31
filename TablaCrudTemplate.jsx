@@ -48,7 +48,7 @@ export function TablaCrudTemplate({ data, columns, onEdit, onDelete,checkEdit })
               enableSorting: false,
               cell: (info) => (
                 <div className="ContentCell">
-                  <Check onChange={() => CheckEdit(info.row.original)} checked={info.getValue()} />
+                  <Check onChange={() => checkEdit(info.row.original)} checked={info.getValue()} />
                 </div>
               ),
             },
