@@ -15,7 +15,13 @@ import { ContentAccionesTabla } from "../organismos/tablas/ContentAccionesTabla"
 import { Device } from "../../styles/breakpoints";
 import { Check } from "../ui/toggles/Check";
 
-export function TablaCrudTemplate({ data, columns, onEdit, onDelete,checkEdit }) {
+export function TablaCrudTemplate({
+  data,
+  columns,
+  onEdit,
+  onDelete,
+  checkEdit,
+}) {
   const [pagina, setPagina] = useState(1);
   const table = useReactTable({
     data,
@@ -37,22 +43,27 @@ export function TablaCrudTemplate({ data, columns, onEdit, onDelete,checkEdit })
                 </div>
               ),
             },
-           
           ]
-        : [
-          checkEdit &&
-            {
-              id: "check",
-              accessorKey: "por_default",
-              header: "Por default",
-              enableSorting: false,
-              cell: (info) => (
-                <div className="ContentCell">
-                  <Check onChange={() => checkEdit(info.row.original)} checked={info.getValue()} />
-                </div>
-              ),
-            },
-        ]),
+        : []),
+      ...(checkEdit ?[
+        {
+          id: "check",
+          accessorKey: "por_default",
+          header: "Por default",
+          enableSorting: false,
+          cell: (info) => (
+            <div className="ContentCell">
+              <Check
+                onChange={() => checkEdit(info.row.original)}
+                checked={info.getValue()}
+              />
+            </div>
+          ),
+        }
+      ] :[
+        
+      ]
+     ),
     ],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -128,11 +139,11 @@ const Container = styled.div`
     margin-bottom: 1.5em;
     border-spacing: 0;
     font-size: 0.7em;
-    .ContentCell{
-  display:flex;
-  margin:auto;
-  justify-content:center;
-}
+    .ContentCell {
+      display: flex;
+      margin: auto;
+      justify-content: center;
+    }
     @media ${Device.tablet} {
       font-size: 0.9em;
       transform: scale(1);
