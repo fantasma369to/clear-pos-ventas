@@ -15,7 +15,7 @@ import { ContentAccionesTabla } from "../organismos/tablas/ContentAccionesTabla"
 import { Device } from "../../styles/breakpoints";
 import { Check } from "../ui/toggles/Check";
 
-export function TablaCrudTemplate({ data, columns, onEdit, onDelete,CheckEdit }) {
+export function TablaCrudTemplate({ data, columns, onEdit, onDelete,checkEdit }) {
   const [pagina, setPagina] = useState(1);
   const table = useReactTable({
     data,
@@ -37,7 +37,10 @@ export function TablaCrudTemplate({ data, columns, onEdit, onDelete,CheckEdit })
                 </div>
               ),
             },
-            CheckEdit &&
+           
+          ]
+        : [
+          checkEdit &&
             {
               id: "check",
               accessorKey: "por_default",
@@ -49,9 +52,6 @@ export function TablaCrudTemplate({ data, columns, onEdit, onDelete,CheckEdit })
                 </div>
               ),
             },
-          ]
-        : [
-         
         ]),
     ],
     getCoreRowModel: getCoreRowModel(),
