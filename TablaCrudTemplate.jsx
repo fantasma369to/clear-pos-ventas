@@ -13,8 +13,9 @@ import { FaArrowsAltV } from "react-icons/fa";
 import { Paginacion } from "../organismos/tablas/Paginacion";
 import { ContentAccionesTabla } from "../organismos/tablas/ContentAccionesTabla";
 import { Device } from "../../styles/breakpoints";
+import { Check } from "../ui/toggles/Check";
 
-export function TablaCrudTemplate({ data, columns, onEdit, onDelete }) {
+export function TablaCrudTemplate({ data, columns, onEdit, onDelete,CheckEdit }) {
   const [pagina, setPagina] = useState(1);
   const table = useReactTable({
     data,
@@ -24,20 +25,34 @@ export function TablaCrudTemplate({ data, columns, onEdit, onDelete }) {
         ? [
             {
               id: "acciones",
-             
               enableSorting: false,
               cell: (info) => (
-                <div  >
+                <div>
                   <ContentAccionesTabla
-                    funcionEditar={onEdit && ( () => onEdit(info.row.original))}
-                    funcionEliminar={onDelete && (() => onDelete(info.row.original))}
+                    funcionEditar={onEdit && (() => onEdit(info.row.original))}
+                    funcionEliminar={
+                      onDelete && (() => onDelete(info.row.original))
+                    }
                   />
-               
+                </div>
+              ),
+            },
+            CheckEdit &&
+            {
+              id: "check",
+              accessorKey: "por_default",
+              header: "Por default",
+              enableSorting: false,
+              cell: (info) => (
+                <div className="ContentCell">
+                  <Check onChange={() => CheckEdit(info.row.original)} checked={info.getValue()} />
                 </div>
               ),
             },
           ]
-        : []),
+        : [
+         
+        ]),
     ],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -52,31 +67,33 @@ export function TablaCrudTemplate({ data, columns, onEdit, onDelete }) {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-               <th key={header.id}>
-               {flexRender(header.column.columnDef.header, header.getContext())}
-               {header.column.getCanSort() && (
-                 <span
-                   style={{ cursor: "pointer" }}
-                   onClick={header.column.getToggleSortingHandler()}
-                 >
-                   <FaArrowsAltV />
-                 </span>
-               )}
-               {
-                 {
-                   asc: " 🔼",
-                   desc: " 🔽",
-                 }[header.column.getIsSorted()]
-               }
-               <div
-                 onMouseDown={header.getResizeHandler()}
-                 onTouchStart={header.getResizeHandler()}
-                 className={`resizer ${
-                   header.column.getIsResizing() ? "isResizing" : ""
-                 }`}
-               />
-             </th>
-             
+                <th key={header.id}>
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                  {header.column.getCanSort() && (
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      <FaArrowsAltV />
+                    </span>
+                  )}
+                  {
+                    {
+                      asc: " 🔼",
+                      desc: " 🔽",
+                    }[header.column.getIsSorted()]
+                  }
+                  <div
+                    onMouseDown={header.getResizeHandler()}
+                    onTouchStart={header.getResizeHandler()}
+                    className={`resizer ${
+                      header.column.getIsResizing() ? "isResizing" : ""
+                    }`}
+                  />
+                </th>
               ))}
             </tr>
           ))}
@@ -111,7 +128,11 @@ const Container = styled.div`
     margin-bottom: 1.5em;
     border-spacing: 0;
     font-size: 0.7em;
-
+    .ContentCell{
+  display:flex;
+  margin:auto;
+  justify-content:center;
+}
     @media ${Device.tablet} {
       font-size: 0.9em;
       transform: scale(1);
@@ -121,7 +142,7 @@ const Container = styled.div`
       position: relative;
       width: auto;
       overflow: auto;
-      
+
       height: 50px;
 
       th {
@@ -129,8 +150,7 @@ const Container = styled.div`
         font-weight: 700;
         text-align: center;
         color: ${({ theme }) => theme.text};
-       
-      
+
         &:first-of-type {
           text-align: center;
         }
